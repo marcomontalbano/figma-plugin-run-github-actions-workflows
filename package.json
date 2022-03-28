@@ -18,8 +18,8 @@
     "editorType": [
       "figma"
     ],
-    "id": "figma-plugin-trigger-github-action",
-    "name": "Plugin Trigger Github Action",
+    "id": "trigger-github-action",
+    "name": "Trigger Github Action",
     "main": "src/main.ts",
     "ui": "src/ui.tsx"
   }

@@ -1,4 +1,4 @@
-# Figma Plugin Trigger Github Action
+# Figma Plugin - Trigger Github Action
 
 ## Development guide
 
