@@ -20,7 +20,7 @@
     ],
     "id": "trigger-github-action",
     "name": "Trigger Github Action",
-    "main": "src/main.ts",
-    "ui": "src/ui.tsx"
+    "main": "src/main/index.ts",
+    "ui": "src/ui/index.tsx"
   }
 }

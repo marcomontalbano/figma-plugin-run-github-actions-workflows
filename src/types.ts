@@ -10,6 +10,11 @@ export interface InfoHandler extends EventHandler {
   handler: () => void
 }
 
+export interface InfoUiHandler extends EventHandler {
+  name: 'INFO_UI'
+  handler: (pageName: string, fileKey: string | undefined, selection: readonly SceneNode[]) => void
+}
+
 export interface CloseHandler extends EventHandler {
   name: 'CLOSE'
   handler: () => void

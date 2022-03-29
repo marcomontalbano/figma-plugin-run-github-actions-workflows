@@ -7,15 +7,16 @@ import {
   TextboxNumeric,
   VerticalSpace
 } from '@create-figma-plugin/ui'
-import { emit } from '@create-figma-plugin/utilities'
+import { emit, on } from '@create-figma-plugin/utilities'
 import { h } from 'preact'
 import { useCallback, useEffect, useState } from 'preact/hooks'
 
-import { CloseHandler, CreateRectanglesHandler, InfoHandler } from './types'
+import { CloseHandler, CreateRectanglesHandler, InfoHandler, InfoUiHandler } from '../types'
 
 function Plugin() {
   const [count, setCount] = useState<number | null>(5)
   const [countString, setCountString] = useState('5')
+
   const handleCreateRectanglesButtonClick = useCallback(
     function () {
       if (count !== null) {
@@ -24,6 +25,12 @@ function Plugin() {
     },
     [count]
   )
+
+  useEffect(() => {
+    on<InfoUiHandler>('INFO_UI', (...args) => {
+      console.log('window.onmessage', args)
+    })
+  }, [])
 
   const handleCloseButtonClick = useCallback(function () {
     emit<CloseHandler>('CLOSE')

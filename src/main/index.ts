@@ -1,6 +1,6 @@
-import { on, once, showUI } from '@create-figma-plugin/utilities'
+import { on, once, emit, showUI } from '@create-figma-plugin/utilities'
 
-import { CloseHandler, CreateRectanglesHandler, InfoHandler } from './types'
+import { CloseHandler, CreateRectanglesHandler, InfoHandler, InfoUiHandler } from '../types'
 
 export default function () {
 
@@ -24,14 +24,22 @@ export default function () {
   })
 
   on<InfoHandler>('INFO', function () {
-    console.log('pageName', figma.currentPage.name)
-    console.log('fileKey', figma.fileKey)
-    console.log('selection', figma.currentPage.selection)
+    const pageName = figma.currentPage.name
+    const fileKey = figma.fileKey
+    const selection = figma.currentPage.selection
+
+    console.log('pageName', pageName)
+    console.log('fileKey', fileKey)
+    console.log('selection', selection)
+
+    emit<InfoUiHandler>('INFO_UI', pageName, fileKey, selection)
   })
 
   once<CloseHandler>('CLOSE', function () {
     figma.closePlugin()
   })
+
+  
 
   showUI({
     width: 240,
