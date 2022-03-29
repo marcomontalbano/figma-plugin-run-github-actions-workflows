@@ -5,6 +5,11 @@ export interface CreateRectanglesHandler extends EventHandler {
   handler: (count: number) => void
 }
 
+export interface InfoHandler extends EventHandler {
+  name: 'INFO'
+  handler: () => void
+}
+
 export interface CloseHandler extends EventHandler {
   name: 'CLOSE'
   handler: () => void

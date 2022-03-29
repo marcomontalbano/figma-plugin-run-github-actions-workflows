@@ -9,9 +9,9 @@ import {
 } from '@create-figma-plugin/ui'
 import { emit } from '@create-figma-plugin/utilities'
 import { h } from 'preact'
-import { useCallback, useState } from 'preact/hooks'
+import { useCallback, useEffect, useState } from 'preact/hooks'
 
-import { CloseHandler, CreateRectanglesHandler } from './types'
+import { CloseHandler, CreateRectanglesHandler, InfoHandler } from './types'
 
 function Plugin() {
   const [count, setCount] = useState<number | null>(5)
@@ -24,9 +24,15 @@ function Plugin() {
     },
     [count]
   )
+
   const handleCloseButtonClick = useCallback(function () {
     emit<CloseHandler>('CLOSE')
   }, [])
+
+  const handleInfoButtonClick = useCallback(function () {
+    emit<InfoHandler>('INFO')
+  }, [])
+
   return (
     <Container>
       <VerticalSpace space="large" />
@@ -44,6 +50,9 @@ function Plugin() {
         </Button>
         <Button fullWidth onClick={handleCloseButtonClick} secondary>
           Close
+        </Button>
+        <Button fullWidth onClick={handleInfoButtonClick} secondary>
+          Info
         </Button>
       </Columns>
       <VerticalSpace space="small" />
