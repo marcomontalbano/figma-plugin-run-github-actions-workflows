@@ -1,8 +1,10 @@
 import {
-  Button,
-  Columns,
   Container,
   Divider,
+  IconCross32,
+  IconInfo32,
+  IconPlay32,
+  Inline,
   LoadingIndicator,
   render,
   Text,
@@ -11,6 +13,7 @@ import {
 import { emit, on } from '@create-figma-plugin/utilities'
 import { Fragment, h } from 'preact'
 import { useCallback, useEffect } from 'preact/hooks'
+import { ButtonIcon } from '../ButtonIcon'
 
 import { GitHubAction, useSettings } from '../Settings'
 import { InfoHandler, InitHandler, LoadSettingsHandler, SaveSettingsHandler } from '../types'
@@ -50,11 +53,11 @@ function Plugin() {
     emit<InfoHandler>('INFO')
   }, [])
 
-  if (!settings) {
-    return <LoadingIndicator />
+  function handleRunGitHubAction(action: GitHubAction) {
+    console.log('action', action)
   }
 
-  async function addGitHubAction(action: GitHubAction) {
+  async function handleAddGitHubAction(action: GitHubAction) {
     const isValid = await isValidAction(action)
 
     if (isValid) {
@@ -64,7 +67,7 @@ function Plugin() {
     return isValid;
   }
 
-  async function editGitHubAction(index: number, action: GitHubAction) {
+  async function handleEditGitHubAction(index: number, action: GitHubAction) {
     const isValid = await isValidAction(action)
 
     if (isValid) {
@@ -74,8 +77,12 @@ function Plugin() {
     return isValid;
   }
 
-  function removeGitHubAction(index: number) {
+  function handleRemoveGitHubAction(index: number) {
     dispatch({ type: 'REMOVE', index })
+  }
+
+  if (!settings) {
+    return <LoadingIndicator />
   }
 
   return (
@@ -85,12 +92,12 @@ function Plugin() {
         settings?.actions.map((action, index) => (
           <Fragment>
             <VerticalSpace space="extraLarge" />
-            <Columns space='extraSmall' style={{ alignItems: 'center' }}>
-              <Text><a target='_blank' href={`https://github.com/${action.owner}/${action.repo}/actions/workflows/${action.workflow_id}`}>{action.name}</a></Text>
-              <ManageAction action={action} onSubmit={(action) => editGitHubAction(index, action)} />
-              <Button fullWidth>Run</Button>
-              <Button fullWidth destructive onClick={() => removeGitHubAction(index)}>Remove</Button>
-            </Columns>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Text style={{ flex: '1 1 auto' }}><a target='_blank' href={`https://github.com/${action.owner}/${action.repo}/actions/workflows/${action.workflow_id}`}>{action.name}</a></Text>
+              <ButtonIcon onClick={() => handleRunGitHubAction(action)}><IconPlay32 /></ButtonIcon>
+              <ManageAction action={action} onSubmit={(action) => handleEditGitHubAction(index, action)} />
+              <ButtonIcon destructive secondary onClick={() => handleRemoveGitHubAction(index)}><IconCross32 /></ButtonIcon>
+            </div>
           </Fragment>
         ))
       }
@@ -99,12 +106,10 @@ function Plugin() {
       <Divider />
       <VerticalSpace space="extraLarge" />
 
-      <Columns space="extraSmall">
-        <Button fullWidth onClick={handleInfoButtonClick} secondary>
-          Info
-        </Button>
-        <ManageAction onSubmit={(action) => addGitHubAction(action)} />
-      </Columns>
+      <Inline space="extraSmall" style={{ textAlign: 'right' }}>
+        <ButtonIcon onClick={handleInfoButtonClick} secondary><IconInfo32/></ButtonIcon>
+        <ManageAction onSubmit={(action) => handleAddGitHubAction(action)} />
+      </Inline>
       <VerticalSpace space="small" />
 
     </Container>

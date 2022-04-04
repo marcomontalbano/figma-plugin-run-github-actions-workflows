@@ -1,4 +1,4 @@
-import { Reducer, useReducer } from 'preact/hooks'
+import { useReducer } from 'preact/hooks'
 import produce from 'immer'
 
 export type GitHubAction = {
@@ -21,27 +21,35 @@ export type Settings = {
   actions: GitHubAction[]
 }
 
-type Action = {
+type LoadAction = {
   type: 'LOAD',
   payload: Settings
-} | {
+}
+
+type AddAction = {
   type: 'ADD',
   payload: GitHubAction
-} | {
+}
+
+type RemoveAction = {
   type: 'REMOVE'
   index: number
-} | {
+}
+
+type EditAction = {
   type: 'EDIT'
   index: number
   payload: GitHubAction
 }
 
-const initialState: Settings = {
+type Action = LoadAction | AddAction | RemoveAction | EditAction
+
+export const initialState: Settings = {
   loaded: false,
   actions: []
 }
 
-const settingsReducer: Reducer<Settings, Action> = produce((draft, action) => {
+export const useSettings = () => useReducer<Settings, Action>(produce((draft, action) => {
   switch (action.type) {
     case 'LOAD':
       return action.payload
@@ -55,6 +63,4 @@ const settingsReducer: Reducer<Settings, Action> = produce((draft, action) => {
       draft.actions[action.index] = action.payload
       break
   }
-})
-
-export const useSettings = () => useReducer(settingsReducer, initialState)
+}), initialState)

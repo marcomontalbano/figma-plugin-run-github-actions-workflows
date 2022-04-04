@@ -1,5 +1,7 @@
 import {
   Button,
+  IconPencil32,
+  IconPlus32,
   Inline,
   Modal,
   Text,
@@ -8,6 +10,7 @@ import {
 } from '@create-figma-plugin/ui'
 import { Fragment, FunctionComponent, h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
+import { ButtonIcon } from '../ButtonIcon'
 import { GitHubAction } from '../Settings'
 
 type Props = {
@@ -37,7 +40,7 @@ export const ManageAction: FunctionComponent<Props> = ({ action: originalAction,
 
   return (
     <Fragment>
-      <Button fullWidth secondary={originalAction !== undefined} onClick={() => setIsOpen(true)}>{originalAction ? 'Edit' : 'Add action'}</Button>
+      <ButtonIcon secondary={originalAction !== undefined} onClick={() => setIsOpen(true)}>{originalAction ? <IconPencil32 /> : <IconPlus32 />}</ButtonIcon>
 
       <Modal
         isOpen={isOpen}
