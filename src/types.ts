@@ -1,11 +1,6 @@
 import { EventHandler } from '@create-figma-plugin/utilities'
 import { Settings } from './Settings'
 
-export interface InitHandler extends EventHandler {
-  name: 'INIT'
-  handler: () => void
-}
-
 export interface LoadSettingsHandler extends EventHandler {
   name: 'LOAD_SETTINGS'
   handler: (settings: Settings) => void
@@ -16,15 +11,12 @@ export interface SaveSettingsHandler extends EventHandler {
   handler: (settings: Settings) => void
 }
 
-
-
-
-export interface InfoHandler extends EventHandler {
-  name: 'INFO'
+export interface RequestInfoHandler extends EventHandler {
+  name: 'REQUEST_INFO'
   handler: () => void
 }
 
-export interface InfoUiHandler extends EventHandler {
-  name: 'INFO_UI'
-  handler: (pageName: string, fileKey: string | undefined, selection: readonly SceneNode[]) => void
+export interface InfoResponseHandler extends EventHandler {
+  name: 'INFO_RESPONSE'
+  handler: (pageName: string, selection: readonly { id: SceneNode['id']; name: SceneNode['name'] }[]) => void
 }

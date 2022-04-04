@@ -1,7 +1,7 @@
 import { on, emit, showUI, loadSettingsAsync, saveSettingsAsync } from '@create-figma-plugin/utilities'
 import { initialState, Settings } from '../Settings'
 
-import { InfoHandler, InfoUiHandler, LoadSettingsHandler, SaveSettingsHandler } from '../types'
+import { RequestInfoHandler, InfoResponseHandler, LoadSettingsHandler, SaveSettingsHandler } from '../types'
 
 export default function () {
 
@@ -9,16 +9,12 @@ export default function () {
     saveSettingsAsync<Settings>(settings)
   })
 
-  on<InfoHandler>('INFO', function () {
-    const pageName = figma.currentPage.name
-    const fileKey = figma.fileKey
-    const selection = figma.currentPage.selection
-
-    console.log('pageName', pageName)
-    console.log('fileKey', fileKey)
-    console.log('selection', selection)
-
-    emit<InfoUiHandler>('INFO_UI', pageName, fileKey, selection)
+  on<RequestInfoHandler>('REQUEST_INFO', function () {
+    emit<InfoResponseHandler>(
+      'INFO_RESPONSE',
+      figma.currentPage.name,
+      figma.currentPage.selection.map(({ id, name }) => ({ id, name }))
+    )
   })
 
   showUI({

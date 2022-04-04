@@ -9,11 +9,13 @@ import {
   Textbox,
   VerticalSpace
 } from '@create-figma-plugin/ui'
+import { emit, once } from '@create-figma-plugin/utilities'
 import { Fragment, FunctionalComponent, h } from 'preact'
 import { useCallback } from 'preact/hooks'
 
 import { ButtonIcon } from '../ButtonIcon'
 import { GitHubAction, useSettings } from '../Settings'
+import { InfoResponseHandler, RequestInfoHandler } from '../types'
 import { ManageAction } from './ManageAction'
 
 
@@ -34,9 +36,16 @@ export function Plugin() {
   }
 
   const handleRunGitHubAction = useCallback((action: GitHubAction) => {
-    console.log('fileKey', settings.fileKey)
-    console.log('action', action)
-    // emit<InfoHandler>('INFO')
+    once<InfoResponseHandler>('INFO_RESPONSE', (pageName, selection) => {
+      console.group('Info')
+      console.log('fileKey', settings.fileKey)
+      console.log('action', action)
+      console.log('pageName', pageName)
+      console.log('selection', selection)
+      console.groupEnd()
+    })
+
+    emit<RequestInfoHandler>('REQUEST_INFO')
   }, [settings])
 
   const handleAddGitHubAction = useCallback(async (action: GitHubAction) => {
