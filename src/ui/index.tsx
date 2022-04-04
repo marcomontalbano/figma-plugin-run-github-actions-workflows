@@ -10,23 +10,30 @@ import {
 } from '@create-figma-plugin/ui'
 import { emit, on } from '@create-figma-plugin/utilities'
 import { Fragment, h } from 'preact'
-import { useCallback, useEffect, useState } from 'preact/hooks'
+import { useCallback, useEffect } from 'preact/hooks'
 
-import { Action, InfoHandler, InitHandler, LoadSettingsHandler, Settings } from '../types'
+import { GitHubAction, useSettings } from '../Settings'
+import { InfoHandler, InitHandler, LoadSettingsHandler, SaveSettingsHandler } from '../types'
 import { ManageAction } from './ManageAction'
 
 function Plugin() {
-  const [settings, setSettings] = useState<Settings>()
+  const [settings, dispatch] = useSettings()
 
   useEffect(function loadSettings() {
     on<LoadSettingsHandler>('LOAD_SETTINGS', settings => {
-      setSettings(settings)
+      dispatch({ type: 'LOAD', payload: settings })
     })
 
     emit<InitHandler>('INIT')
   }, [])
 
-  function isValidAction(action: Action) {
+  useEffect(function saveSettings() {
+    if (settings.loaded) {
+      emit<SaveSettingsHandler>('SAVE_SETTINGS', settings)
+    }
+  }, [settings])
+
+  function isValidAction(action: GitHubAction) {
     // https://docs.github.com/en/rest/reference/actions#get-a-workflow
     return fetch(`https://api.github.com/repos/${action.owner}/${action.repo}/actions/workflows/${action.workflow_id}`, {
       method: 'GET',
@@ -47,17 +54,42 @@ function Plugin() {
     return <LoadingIndicator />
   }
 
+  async function addGitHubAction(action: GitHubAction) {
+    const isValid = await isValidAction(action)
+
+    if (isValid) {
+      dispatch({ type: 'ADD', payload: action })
+    }
+
+    return isValid;
+  }
+
+  async function editGitHubAction(index: number, action: GitHubAction) {
+    const isValid = await isValidAction(action)
+
+    if (isValid) {
+      dispatch({ type: 'EDIT', index, payload: action })
+    }
+
+    return isValid;
+  }
+
+  function removeGitHubAction(index: number) {
+    dispatch({ type: 'REMOVE', index })
+  }
+
   return (
     <Container>
 
       {
-        settings?.actions.map(action => (
+        settings?.actions.map((action, index) => (
           <Fragment>
             <VerticalSpace space="extraLarge" />
             <Columns space='extraSmall' style={{ alignItems: 'center' }}>
               <Text><a target='_blank' href={`https://github.com/${action.owner}/${action.repo}/actions/workflows/${action.workflow_id}`}>{action.name}</a></Text>
-              <ManageAction action={action} onSubmit={(action) => (console.log(action), isValidAction(action))} />
+              <ManageAction action={action} onSubmit={(action) => editGitHubAction(index, action)} />
               <Button fullWidth>Run</Button>
+              <Button fullWidth destructive onClick={() => removeGitHubAction(index)}>Remove</Button>
             </Columns>
           </Fragment>
         ))
@@ -71,7 +103,7 @@ function Plugin() {
         <Button fullWidth onClick={handleInfoButtonClick} secondary>
           Info
         </Button>
-        <ManageAction onSubmit={(action) => (console.log(action), isValidAction(action))} />
+        <ManageAction onSubmit={(action) => addGitHubAction(action)} />
       </Columns>
       <VerticalSpace space="small" />
 

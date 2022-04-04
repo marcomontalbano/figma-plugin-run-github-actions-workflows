@@ -1,6 +1,10 @@
 {
   "extends": "@create-figma-plugin/tsconfig",
   "compilerOptions": {
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
     "typeRoots": ["node_modules/@figma", "node_modules/@types"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]

@@ -1,11 +1,12 @@
 import { on, emit, showUI, loadSettingsAsync, saveSettingsAsync } from '@create-figma-plugin/utilities'
+import { Settings } from '../Settings'
 
-import { InfoHandler, InfoUiHandler, InitHandler, LoadSettingsHandler, SaveSettingsHandler, Settings } from '../types'
+import { InfoHandler, InfoUiHandler, InitHandler, LoadSettingsHandler, SaveSettingsHandler } from '../types'
 
 export default function () {
 
   on<InitHandler>('INIT', function () {
-    loadSettingsAsync<Settings>({ actions: [] }).then(settings => {
+    loadSettingsAsync<Settings>({ actions: [], loaded: true }).then(settings => {
       emit<LoadSettingsHandler>('LOAD_SETTINGS', settings)
     })
   })

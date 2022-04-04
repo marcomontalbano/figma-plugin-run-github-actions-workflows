@@ -2,6 +2,7 @@
   "dependencies": {
     "@create-figma-plugin/ui": "^1.8.4",
     "@create-figma-plugin/utilities": "^1.8.4",
+    "immer": "^9.0.12",
     "preact": "^10"
   },
   "devDependencies": {
