@@ -1,15 +1,9 @@
 import { on, emit, showUI, loadSettingsAsync, saveSettingsAsync } from '@create-figma-plugin/utilities'
 import { initialState, Settings } from '../Settings'
 
-import { InfoHandler, InfoUiHandler, InitHandler, LoadSettingsHandler, SaveSettingsHandler } from '../types'
+import { InfoHandler, InfoUiHandler, LoadSettingsHandler, SaveSettingsHandler } from '../types'
 
 export default function () {
-
-  on<InitHandler>('INIT', function () {
-    loadSettingsAsync<Settings>({ ...initialState, loaded: true, fileKey: figma.fileKey }).then(settings => {
-      emit<LoadSettingsHandler>('LOAD_SETTINGS', settings)
-    })
-  })
 
   on<SaveSettingsHandler>('SAVE_SETTINGS', function (settings) {
     saveSettingsAsync<Settings>(settings)
@@ -30,6 +24,10 @@ export default function () {
   showUI({
     width: 400,
     height: 500
+  })
+
+  loadSettingsAsync<Settings>({ ...initialState, fileKey: figma.fileKey }).then(settings => {
+    emit<LoadSettingsHandler>('LOAD_SETTINGS', { ...settings, loaded: true })
   })
 
 }
