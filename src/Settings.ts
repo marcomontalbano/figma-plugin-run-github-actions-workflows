@@ -18,34 +18,31 @@ export type GitHubAction = {
 
 export type Settings = {
   loaded: boolean
+  fileKey: string | undefined
   actions: GitHubAction[]
 }
 
-type LoadAction = {
+type Action = {
   type: 'LOAD',
   payload: Settings
-}
-
-type AddAction = {
-  type: 'ADD',
+} | {
+  type: 'ADD_ACTION',
   payload: GitHubAction
-}
-
-type RemoveAction = {
-  type: 'REMOVE'
+} | {
+  type: 'REMOVE_ACTION'
   index: number
-}
-
-type EditAction = {
-  type: 'EDIT'
+} | {
+  type: 'EDIT_ACTION'
   index: number
   payload: GitHubAction
+} | {
+  type: 'EDIT_FILE_KEY',
+  fileKey: string
 }
-
-type Action = LoadAction | AddAction | RemoveAction | EditAction
 
 export const initialState: Settings = {
   loaded: false,
+  fileKey: undefined,
   actions: []
 }
 
@@ -53,14 +50,17 @@ export const useSettings = () => useReducer<Settings, Action>(produce((draft, ac
   switch (action.type) {
     case 'LOAD':
       return action.payload
-    case 'ADD':
+    case 'ADD_ACTION':
       draft.actions.push(action.payload)
       break
-    case 'REMOVE':
+    case 'REMOVE_ACTION':
       draft.actions.splice(action.index, 1)
       break
-    case 'EDIT':
+    case 'EDIT_ACTION':
       draft.actions[action.index] = action.payload
       break
+    case 'EDIT_FILE_KEY':
+      draft.fileKey = action.fileKey
+      break;
   }
 }), initialState)

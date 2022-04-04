@@ -2,12 +2,12 @@ import {
   Container,
   Divider,
   IconCross32,
-  IconInfo32,
   IconPlay32,
   Inline,
   LoadingIndicator,
   render,
   Text,
+  Textbox,
   VerticalSpace
 } from '@create-figma-plugin/ui'
 import { emit, on } from '@create-figma-plugin/utilities'
@@ -16,7 +16,7 @@ import { useCallback, useEffect } from 'preact/hooks'
 import { ButtonIcon } from '../ButtonIcon'
 
 import { GitHubAction, useSettings } from '../Settings'
-import { InfoHandler, InitHandler, LoadSettingsHandler, SaveSettingsHandler } from '../types'
+import { InitHandler, LoadSettingsHandler, SaveSettingsHandler } from '../types'
 import { ManageAction } from './ManageAction'
 
 function Plugin() {
@@ -49,37 +49,34 @@ function Plugin() {
       .then(json => json.state === 'active')
   }
 
-  const handleInfoButtonClick = useCallback(function () {
-    emit<InfoHandler>('INFO')
+  const handleRunGitHubAction = useCallback((action: GitHubAction) => {
+    console.log('action', action)
+    // emit<InfoHandler>('INFO')
   }, [])
 
-  function handleRunGitHubAction(action: GitHubAction) {
-    console.log('action', action)
-  }
-
-  async function handleAddGitHubAction(action: GitHubAction) {
+  const handleAddGitHubAction = useCallback(async (action: GitHubAction) => {
     const isValid = await isValidAction(action)
 
     if (isValid) {
-      dispatch({ type: 'ADD', payload: action })
+      dispatch({ type: 'ADD_ACTION', payload: action })
     }
 
     return isValid;
-  }
+  }, [])
 
-  async function handleEditGitHubAction(index: number, action: GitHubAction) {
+  const handleEditGitHubAction = useCallback(async(index: number, action: GitHubAction) => {
     const isValid = await isValidAction(action)
 
     if (isValid) {
-      dispatch({ type: 'EDIT', index, payload: action })
+      dispatch({ type: 'EDIT_ACTION', index, payload: action })
     }
 
     return isValid;
-  }
+  }, [])
 
-  function handleRemoveGitHubAction(index: number) {
-    dispatch({ type: 'REMOVE', index })
-  }
+  const handleRemoveGitHubAction = useCallback((index: number) => {
+    dispatch({ type: 'REMOVE_ACTION', index })
+  }, [])
 
   if (!settings) {
     return <LoadingIndicator />
@@ -87,6 +84,17 @@ function Plugin() {
 
   return (
     <Container>
+      <VerticalSpace space="extraLarge" />
+
+      <Text muted>File key</Text>
+      <VerticalSpace space="small" />
+      <Textbox
+        required
+        onValueInput={(value) => dispatch({ type: 'EDIT_FILE_KEY', fileKey: value }) }
+        value={settings.fileKey || ''}
+      />
+      <VerticalSpace space="extraLarge" />
+      <Divider />
 
       {
         settings?.actions.map((action, index) => (
@@ -102,12 +110,11 @@ function Plugin() {
         ))
       }
 
-      <VerticalSpace space="extraLarge" />
-      <Divider />
+      {/* <VerticalSpace space="extraLarge" />
+      <Divider /> */}
       <VerticalSpace space="extraLarge" />
 
       <Inline space="extraSmall" style={{ textAlign: 'right' }}>
-        <ButtonIcon onClick={handleInfoButtonClick} secondary><IconInfo32/></ButtonIcon>
         <ManageAction onSubmit={(action) => handleAddGitHubAction(action)} />
       </Inline>
       <VerticalSpace space="small" />

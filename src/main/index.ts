@@ -6,7 +6,7 @@ import { InfoHandler, InfoUiHandler, InitHandler, LoadSettingsHandler, SaveSetti
 export default function () {
 
   on<InitHandler>('INIT', function () {
-    loadSettingsAsync<Settings>({ ...initialState, loaded: true }).then(settings => {
+    loadSettingsAsync<Settings>({ ...initialState, loaded: true, fileKey: figma.fileKey }).then(settings => {
       emit<LoadSettingsHandler>('LOAD_SETTINGS', settings)
     })
   })
