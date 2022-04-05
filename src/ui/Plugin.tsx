@@ -41,7 +41,7 @@ export function Plugin() {
 
   const handleRunGitHubAction = useCallback((action: GitHubAction) => {
     console.group('Info')
-      console.log('action', action)
+      console.log('action', { ...action, access_token: '***' })
       console.group('Inputs')
         console.log('fileKey', settings.fileKey)
         console.log('pageName', settings.pageName)
