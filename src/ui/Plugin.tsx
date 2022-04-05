@@ -9,31 +9,21 @@ import {
   Textbox,
   VerticalSpace
 } from '@create-figma-plugin/ui'
-import { emit, on } from '@create-figma-plugin/utilities'
+import { emit } from '@create-figma-plugin/utilities'
 import { Fragment, FunctionalComponent, h } from 'preact'
 import { useCallback, useEffect } from 'preact/hooks'
 
 import { ButtonIcon } from '../ButtonIcon'
 import { GitHubAction, useSettings } from '../Settings'
-import { InfoResponseHandler, RequestInfoHandler } from '../types'
+import { InitHandler } from '../types'
 import { ManageAction } from './ManageAction'
 
 
 export function Plugin() {
   const [ settings, dispatch ] = useSettings()
 
-  useEffect(function getInfo() {
-    on<InfoResponseHandler>('INFO_RESPONSE', (pageName, selection) => {
-      dispatch({ type: 'EDIT_SELECTION', pageName, selection })
-    })
-
-    const interval = setInterval(() => {
-      emit<RequestInfoHandler>('REQUEST_INFO')
-    }, 100)
-
-    return () => {
-      clearInterval(interval)
-    }
+  useEffect(function init() {
+    emit<InitHandler>('INIT')
   }, [])
 
   function isValidAction(action: GitHubAction) {
@@ -51,10 +41,12 @@ export function Plugin() {
 
   const handleRunGitHubAction = useCallback((action: GitHubAction) => {
     console.group('Info')
-      console.log('fileKey', settings.fileKey)
       console.log('action', action)
-      console.log('pageName', settings.pageName)
-      console.log('selection', settings.selection)
+      console.group('Inputs')
+        console.log('fileKey', settings.fileKey)
+        console.log('pageName', settings.pageName)
+        console.log('selection', settings.selection)
+      console.groupEnd()
     console.groupEnd()
   }, [settings])
 

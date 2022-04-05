@@ -3,7 +3,7 @@ import produce from 'immer'
 import { createContext, FunctionalComponent, h } from 'preact'
 import { useContext, useEffect, useReducer } from 'preact/hooks'
 
-import { LoadSettingsHandler, SaveSettingsHandler, Selection } from './types'
+import { InfoResponseHandler, LoadSettingsHandler, RequestInfoHandler, SaveSettingsHandler, Selection } from './types'
 
 
 export type GitHubAction = {
@@ -21,11 +21,17 @@ export type GitHubAction = {
   ref: string
 }
 
-export type Settings = {
+export type Settings = UserSettings & DocumentSettings & {
   loaded: boolean
-  fileKey: string | undefined
   pageName: string | undefined
   selection: Selection[]
+}
+
+export type DocumentSettings = {
+  fileKey: string | undefined
+}
+
+export type UserSettings = {
   actions: GitHubAction[]
 }
 
@@ -76,7 +82,6 @@ const SettingsProvider: FunctionalComponent = ({ children }) => {
 
   useEffect(function loadSettings() {
     on<LoadSettingsHandler>('LOAD_SETTINGS', settings => {
-      console.log(settings)
       dispatch({ type: 'LOAD', payload: settings })
     })
   }, []);
@@ -85,7 +90,19 @@ const SettingsProvider: FunctionalComponent = ({ children }) => {
     if (settings.loaded) {
       emit<SaveSettingsHandler>('SAVE_SETTINGS', settings)
     }
-  }, [settings])
+  }, [settings.actions, settings.fileKey])
+
+  useEffect(function getInfo() {
+    on<InfoResponseHandler>('INFO_RESPONSE', (pageName, selection) => {
+      dispatch({ type: 'EDIT_SELECTION', pageName, selection: selection })
+    })
+
+    const interval = setInterval(() => {
+      emit<RequestInfoHandler>('REQUEST_INFO')
+    }, 100)
+
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <OriginalSettingsContext.Provider value={[settings, dispatch]}>

@@ -1,12 +1,27 @@
 import { on, emit, showUI, loadSettingsAsync, saveSettingsAsync } from '@create-figma-plugin/utilities'
-import { initialState, Settings } from '../Settings'
+import { initialState, UserSettings, Settings } from '../Settings'
 
-import { RequestInfoHandler, InfoResponseHandler, LoadSettingsHandler, SaveSettingsHandler } from '../types'
+import { RequestInfoHandler, InfoResponseHandler, LoadSettingsHandler, SaveSettingsHandler, InitHandler } from '../types'
 
 export default function () {
 
-  on<SaveSettingsHandler>('SAVE_SETTINGS', function (settings) {
-    saveSettingsAsync<Settings>(settings)
+  on<InitHandler>('INIT', function() {
+    loadSettingsAsync<Settings>(initialState).then(settings => {
+      emit<LoadSettingsHandler>('LOAD_SETTINGS', {
+        ...settings,
+        loaded: true,
+        fileKey: figma.root.getPluginData('fileKey')
+      })
+
+      console.log('Settings LOADED')
+    })
+  })
+
+  on<SaveSettingsHandler>('SAVE_SETTINGS', function ({ fileKey, actions }) {
+    saveSettingsAsync<UserSettings>({ actions }).then(() => {
+      figma.root.setPluginData('fileKey', fileKey || '')
+      console.log('Settings SAVED')
+    })
   })
 
   on<RequestInfoHandler>('REQUEST_INFO', function () {
@@ -21,9 +36,4 @@ export default function () {
     width: 400,
     height: 500
   })
-
-  loadSettingsAsync<Settings>({ ...initialState, fileKey: figma.fileKey }).then(settings => {
-    emit<LoadSettingsHandler>('LOAD_SETTINGS', { ...settings, loaded: true })
-  })
-
 }

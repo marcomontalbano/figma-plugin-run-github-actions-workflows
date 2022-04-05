@@ -1,6 +1,11 @@
 import { EventHandler } from '@create-figma-plugin/utilities'
 import { Settings } from './Settings'
 
+export interface InitHandler extends EventHandler {
+  name: 'INIT'
+  handler: () => void
+}
+
 export interface LoadSettingsHandler extends EventHandler {
   name: 'LOAD_SETTINGS'
   handler: (settings: Settings) => void
