@@ -15,7 +15,7 @@ import { useCallback, useEffect } from 'preact/hooks'
 
 import { ButtonIcon } from '../ButtonIcon'
 import { GitHubAction, useSettings } from '../Settings'
-import { InitHandler } from '../types'
+import { InitHandler, NotifyHandler } from '../types'
 import { ManageAction } from './ManageAction'
 
 
@@ -48,6 +48,31 @@ export function Plugin() {
         console.log('selection', settings.selection)
       console.groupEnd()
     console.groupEnd()
+
+    // https://docs.github.com/en/rest/reference/actions#create-a-workflow-dispatch-event
+    fetch(`https://api.github.com/repos/${action.owner}/${action.repo}/actions/workflows/${action.workflow_id}/dispatches`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `token ${action.access_token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify({
+        ref: action.ref,
+        inputs: {
+          fileKey: settings.fileKey,
+          pageName: settings.pageName,
+          selection: JSON.stringify(settings.selection)
+        }
+      })
+    })
+    .then(async response => {
+      if (response.status === 204) {
+        emit<NotifyHandler>('NOTIFY', `Action "${action.name}" triggered!`)
+      } else {
+        const { message } = await response.json()
+        emit<NotifyHandler>('NOTIFY', message, { error: true })
+      }
+    })
   }, [settings])
 
   const handleAddGitHubAction = useCallback(async (action: GitHubAction) => {

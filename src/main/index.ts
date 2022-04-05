@@ -1,7 +1,7 @@
 import { on, emit, showUI, loadSettingsAsync, saveSettingsAsync } from '@create-figma-plugin/utilities'
 import { initialState, UserSettings, Settings } from '../Settings'
 
-import { RequestInfoHandler, InfoResponseHandler, LoadSettingsHandler, SaveSettingsHandler, InitHandler } from '../types'
+import { RequestInfoHandler, InfoResponseHandler, LoadSettingsHandler, SaveSettingsHandler, InitHandler, NotifyHandler } from '../types'
 
 export default function () {
 
@@ -30,6 +30,10 @@ export default function () {
       figma.currentPage.name,
       figma.currentPage.selection.map(({ id, name }) => ({ id, name }))
     )
+  })
+
+  on<NotifyHandler>('NOTIFY', function (message, options) {
+    figma.notify(message, options)
   })
 
   showUI({

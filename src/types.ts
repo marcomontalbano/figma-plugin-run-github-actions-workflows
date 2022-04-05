@@ -6,6 +6,11 @@ export interface InitHandler extends EventHandler {
   handler: () => void
 }
 
+export interface NotifyHandler extends EventHandler {
+  name: 'NOTIFY'
+  handler: (message: string, options?: NotificationOptions) => void
+}
+
 export interface LoadSettingsHandler extends EventHandler {
   name: 'LOAD_SETTINGS'
   handler: (settings: Settings) => void
