@@ -3,7 +3,7 @@ import produce from 'immer'
 import { createContext, FunctionalComponent, h } from 'preact'
 import { useContext, useEffect, useReducer } from 'preact/hooks'
 
-import { LoadSettingsHandler, SaveSettingsHandler } from './types'
+import { LoadSettingsHandler, SaveSettingsHandler, Selection } from './types'
 
 
 export type GitHubAction = {
@@ -24,6 +24,8 @@ export type GitHubAction = {
 export type Settings = {
   loaded: boolean
   fileKey: string | undefined
+  pageName: string | undefined
+  selection: Selection[]
   actions: GitHubAction[]
 }
 
@@ -33,10 +35,13 @@ type Action =
   | { type: 'REMOVE_ACTION'; index: number }
   | { type: 'EDIT_ACTION'; index: number; payload: GitHubAction }
   | { type: 'EDIT_FILE_KEY'; fileKey: string }
+  | { type: 'EDIT_SELECTION'; pageName: string; selection: Selection[] }
 
 export const initialState: Settings = {
   loaded: false,
   fileKey: undefined,
+  pageName: undefined,
+  selection: [],
   actions: []
 }
 
@@ -55,6 +60,10 @@ export const useSettingsReducer = () => useReducer<Settings, Action>(produce((dr
       break
     case 'EDIT_FILE_KEY':
       draft.fileKey = action.fileKey
+      break;
+    case 'EDIT_SELECTION':
+      draft.pageName = action.pageName
+      draft.selection = action.selection
       break;
   }
 }), initialState)

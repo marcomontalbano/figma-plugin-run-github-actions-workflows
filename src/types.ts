@@ -18,5 +18,10 @@ export interface RequestInfoHandler extends EventHandler {
 
 export interface InfoResponseHandler extends EventHandler {
   name: 'INFO_RESPONSE'
-  handler: (pageName: string, selection: readonly { id: SceneNode['id']; name: SceneNode['name'] }[]) => void
+  handler: (pageName: string, selection: Selection[]) => void
+}
+
+export type Selection = {
+  id: SceneNode['id']
+  name: SceneNode['name']
 }

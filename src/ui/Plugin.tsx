@@ -9,9 +9,9 @@ import {
   Textbox,
   VerticalSpace
 } from '@create-figma-plugin/ui'
-import { emit, once } from '@create-figma-plugin/utilities'
+import { emit, on } from '@create-figma-plugin/utilities'
 import { Fragment, FunctionalComponent, h } from 'preact'
-import { useCallback } from 'preact/hooks'
+import { useCallback, useEffect } from 'preact/hooks'
 
 import { ButtonIcon } from '../ButtonIcon'
 import { GitHubAction, useSettings } from '../Settings'
@@ -21,6 +21,20 @@ import { ManageAction } from './ManageAction'
 
 export function Plugin() {
   const [ settings, dispatch ] = useSettings()
+
+  useEffect(function getInfo() {
+    on<InfoResponseHandler>('INFO_RESPONSE', (pageName, selection) => {
+      dispatch({ type: 'EDIT_SELECTION', pageName, selection })
+    })
+
+    const interval = setInterval(() => {
+      emit<RequestInfoHandler>('REQUEST_INFO')
+    }, 100)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
 
   function isValidAction(action: GitHubAction) {
     // https://docs.github.com/en/rest/reference/actions#get-a-workflow
@@ -36,16 +50,12 @@ export function Plugin() {
   }
 
   const handleRunGitHubAction = useCallback((action: GitHubAction) => {
-    once<InfoResponseHandler>('INFO_RESPONSE', (pageName, selection) => {
-      console.group('Info')
+    console.group('Info')
       console.log('fileKey', settings.fileKey)
       console.log('action', action)
-      console.log('pageName', pageName)
-      console.log('selection', selection)
-      console.groupEnd()
-    })
-
-    emit<RequestInfoHandler>('REQUEST_INFO')
+      console.log('pageName', settings.pageName)
+      console.log('selection', settings.selection)
+    console.groupEnd()
   }, [settings])
 
   const handleAddGitHubAction = useCallback(async (action: GitHubAction) => {
@@ -81,6 +91,7 @@ export function Plugin() {
       <VerticalSpace space="extraLarge" />
 
       <FileKey />
+      <Info />
 
       <Divider />
 
@@ -109,7 +120,7 @@ export function Plugin() {
 }
 
 const FileKey: FunctionalComponent = () => {
-  const [ settings, dispatch ] = useSettings()
+  const [settings, dispatch] = useSettings()
 
   return (
     <Fragment>
@@ -121,6 +132,27 @@ const FileKey: FunctionalComponent = () => {
         value={settings.fileKey || ''}
       />
       <VerticalSpace space="extraLarge" />
+    </Fragment>
+  )
+}
+
+const Info: FunctionalComponent = () => {
+  const [settings] = useSettings()
+
+  return (
+    <Fragment>
+      <div>
+        <Text muted>Page name</Text>
+        <VerticalSpace space="small" />
+        <Textbox required value={settings.pageName || ''} disabled />
+        <VerticalSpace space="extraLarge" />
+      </div>
+      <div>
+        <Text muted>Selection</Text>
+        <VerticalSpace space="small" />
+        <Textbox required value={JSON.stringify(settings.selection)} disabled />
+        <VerticalSpace space="extraLarge" />
+      </div>
     </Fragment>
   )
 }
