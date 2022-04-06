@@ -1,21 +1,21 @@
 import {
   Container,
-  Divider,
   IconCross32,
   IconPlay32,
   Inline,
   LoadingIndicator,
   Text,
-  Textbox,
   VerticalSpace
 } from '@create-figma-plugin/ui'
 import { emit } from '@create-figma-plugin/utilities'
-import { Fragment, FunctionalComponent, h } from 'preact'
+import { Fragment, h } from 'preact'
 import { useCallback, useEffect } from 'preact/hooks'
 
-import { ButtonIcon } from '../ButtonIcon'
+import { ButtonIcon } from './components/ButtonIcon'
 import { GitHubAction, useSettings } from '../Settings'
 import { InitHandler, NotifyHandler } from '../types'
+import { Inputs } from './components/Inputs'
+import { Title } from './components/Title'
 import { ManageAction } from './ManageAction'
 
 
@@ -117,17 +117,14 @@ export function Plugin() {
 
   return (
     <Container>
-      <VerticalSpace space="extraLarge" />
+      <Inputs />
 
-      <FileKey />
-      <Info />
-
-      <Divider />
+      <Title>Actions</Title>
 
       {
         settings?.actions.map((action, index) => (
           <Fragment>
-            <VerticalSpace space="extraLarge" />
+            <VerticalSpace space='small' />
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Text style={{ flex: '1 1 auto' }}><a target='_blank' href={`https://github.com/${action.owner}/${action.repo}/actions/workflows/${action.workflow_id}`}>{action.name}</a></Text>
               <ButtonIcon onClick={() => handleRunGitHubAction(action)}><IconPlay32 /></ButtonIcon>
@@ -138,50 +135,11 @@ export function Plugin() {
         ))
       }
 
-      <VerticalSpace space="extraLarge" />
-      <Inline space="extraSmall" style={{ textAlign: 'right' }}>
+      <VerticalSpace space='large' />
+      <Inline space='extraSmall' style={{ textAlign: 'right' }}>
         <ManageAction onSubmit={(action) => handleAddGitHubAction(action)} />
       </Inline>
-      <VerticalSpace space="small" />
 
     </Container>
-  )
-}
-
-const FileKey: FunctionalComponent = () => {
-  const [settings, dispatch] = useSettings()
-
-  return (
-    <Fragment>
-      <Text muted>File key</Text>
-      <VerticalSpace space="small" />
-      <Textbox
-        required
-        onValueInput={(value) => dispatch({ type: 'EDIT_FILE_KEY', fileKey: value })}
-        value={settings.fileKey || ''}
-      />
-      <VerticalSpace space="extraLarge" />
-    </Fragment>
-  )
-}
-
-const Info: FunctionalComponent = () => {
-  const [settings] = useSettings()
-
-  return (
-    <Fragment>
-      <div>
-        <Text muted>Page name</Text>
-        <VerticalSpace space="small" />
-        <Textbox required value={settings.pageName || ''} disabled />
-        <VerticalSpace space="extraLarge" />
-      </div>
-      <div>
-        <Text muted>Selection</Text>
-        <VerticalSpace space="small" />
-        <Textbox required value={JSON.stringify(settings.selection)} disabled />
-        <VerticalSpace space="extraLarge" />
-      </div>
-    </Fragment>
   )
 }
