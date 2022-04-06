@@ -104,8 +104,11 @@ export function Plugin() {
     return isValid;
   }, [])
 
-  const handleRemoveGitHubAction = useCallback((index: number) => {
-    dispatch({ type: 'REMOVE_ACTION', index })
+  const handleRemoveGitHubAction = useCallback((index: number, action: GitHubAction) => {
+    if (confirm(`Do you really want to remove "${action.name}" action?`)) {
+      dispatch({ type: 'REMOVE_ACTION', index })
+      emit<NotifyHandler>('NOTIFY', `Action "${action.name}" removed!`)
+    }
   }, [])
 
   if (!settings) {
@@ -129,7 +132,7 @@ export function Plugin() {
               <Text style={{ flex: '1 1 auto' }}><a target='_blank' href={`https://github.com/${action.owner}/${action.repo}/actions/workflows/${action.workflow_id}`}>{action.name}</a></Text>
               <ButtonIcon onClick={() => handleRunGitHubAction(action)}><IconPlay32 /></ButtonIcon>
               <ManageAction action={action} onSubmit={(action) => handleEditGitHubAction(index, action)} />
-              <ButtonIcon destructive secondary onClick={() => handleRemoveGitHubAction(index)}><IconCross32 /></ButtonIcon>
+              <ButtonIcon destructive secondary onClick={() => handleRemoveGitHubAction(index, action)}><IconCross32 /></ButtonIcon>
             </div>
           </Fragment>
         ))
