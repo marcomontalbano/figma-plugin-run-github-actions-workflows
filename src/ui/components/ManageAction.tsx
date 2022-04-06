@@ -11,9 +11,9 @@ import {
 import { emit } from '@create-figma-plugin/utilities'
 import { Fragment, FunctionComponent, h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
-import { ButtonIcon } from './components/ButtonIcon'
-import { GitHubAction } from '../Settings'
-import { NotifyHandler } from '../types'
+import { ButtonIcon } from './ButtonIcon'
+import { GitHubAction } from '../../Settings'
+import { NotifyHandler } from '../../types'
 
 type Props = {
   action?: GitHubAction

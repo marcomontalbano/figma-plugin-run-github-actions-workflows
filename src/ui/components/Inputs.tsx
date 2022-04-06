@@ -1,5 +1,6 @@
 import { Props, Text, Textbox, TextboxProps, VerticalSpace } from '@create-figma-plugin/ui'
 import { h, Fragment, JSX } from 'preact'
+
 import { useSettings } from '../../Settings'
 import { Title } from './Title'
 
