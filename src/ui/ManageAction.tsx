@@ -8,10 +8,12 @@ import {
   Textbox,
   VerticalSpace
 } from '@create-figma-plugin/ui'
+import { emit } from '@create-figma-plugin/utilities'
 import { Fragment, FunctionComponent, h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 import { ButtonIcon } from '../ButtonIcon'
 import { GitHubAction } from '../Settings'
+import { NotifyHandler } from '../types'
 
 type Props = {
   action?: GitHubAction
@@ -30,7 +32,8 @@ export const ManageAction: FunctionComponent<Props> = ({ action: originalAction,
 
   function handleSubmit() {
     if (!action || !action.access_token || !action.name || !action.owner || !action.ref || !action.repo || !action.workflow_id) {
-      throw new Error('All fields are required!')
+      emit<NotifyHandler>('NOTIFY', 'All fields are required!', { error: true })
+      return
     }
 
     onSubmit(action as GitHubAction).then(ok => {

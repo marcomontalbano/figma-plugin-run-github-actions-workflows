@@ -35,8 +35,17 @@ export function Plugin() {
         'Accept': 'application/vnd.github.v3+json'
       },
     })
-      .then(response => response.json())
-      .then(json => json.state === 'active')
+      .then(async response => {
+        const { message: errorMessage, state } = await response.json()
+
+        if (response.status === 200) {
+          emit<NotifyHandler>('NOTIFY', `Action "${action.name}" saved!`)
+        } else {
+          emit<NotifyHandler>('NOTIFY', `Error when saving action with message "${errorMessage}"`, { error: true })
+        }
+
+        return state === 'active'
+      })
   }
 
   const handleRunGitHubAction = useCallback((action: GitHubAction) => {
