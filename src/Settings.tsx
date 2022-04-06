@@ -3,7 +3,7 @@ import produce from 'immer'
 import { createContext, FunctionalComponent, h } from 'preact'
 import { useContext, useEffect, useReducer } from 'preact/hooks'
 
-import { InfoResponseHandler, LoadSettingsHandler, RequestInfoHandler, SaveSettingsHandler, Selection } from './types'
+import { InfoResponseHandler, LoadSettingsHandler, Page, RequestInfoHandler, SaveSettingsHandler, Selection } from './types'
 
 
 export type GitHubAction = {
@@ -23,7 +23,7 @@ export type GitHubAction = {
 
 export type Settings = UserSettings & DocumentSettings & {
   loaded: boolean
-  pageName: string | undefined
+  page: Page | undefined
   selection: Selection[]
 }
 
@@ -41,12 +41,12 @@ type Action =
   | { type: 'REMOVE_ACTION'; index: number }
   | { type: 'EDIT_ACTION'; index: number; payload: GitHubAction }
   | { type: 'EDIT_FILE_KEY'; fileKey: string }
-  | { type: 'EDIT_SELECTION'; pageName: string; selection: Selection[] }
+  | { type: 'EDIT_SELECTION'; page: Page; selection: Selection[] }
 
 export const initialState: Settings = {
   loaded: false,
   fileKey: undefined,
-  pageName: undefined,
+  page: undefined,
   selection: [],
   actions: []
 }
@@ -68,7 +68,7 @@ export const useSettingsReducer = () => useReducer<Settings, Action>(produce((dr
       draft.fileKey = action.fileKey
       break;
     case 'EDIT_SELECTION':
-      draft.pageName = action.pageName
+      draft.page = action.page
       draft.selection = action.selection
       break;
   }
@@ -93,8 +93,8 @@ const SettingsProvider: FunctionalComponent = ({ children }) => {
   }, [settings.actions, settings.fileKey])
 
   useEffect(function getInfo() {
-    on<InfoResponseHandler>('INFO_RESPONSE', (pageName, selection) => {
-      dispatch({ type: 'EDIT_SELECTION', pageName, selection: selection })
+    on<InfoResponseHandler>('INFO_RESPONSE', (page, selection) => {
+      dispatch({ type: 'EDIT_SELECTION', page, selection: selection })
     })
 
     const interval = setInterval(() => {

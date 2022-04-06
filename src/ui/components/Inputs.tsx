@@ -20,9 +20,9 @@ export function Inputs(): JSX.Element {
         value={settings.fileKey || ''} />
 
       <Input
-        label='pageName'
+        label='page'
         required
-        value={settings.pageName || ''}
+        value={JSON.stringify(settings.page) || ''}
         disabled />
 
       <Input

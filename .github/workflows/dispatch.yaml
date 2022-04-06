@@ -7,7 +7,7 @@ on:
         description: Figma file key
         type: string
         required: true
-      pageName:
+      page:
         description: Page name
         type: string
         required: true
@@ -30,15 +30,15 @@ jobs:
         uses: ./.github/actions/trigger-github-action-transformer
         with:
           fileKey: ${{ github.event.inputs.fileKey }}
-          pageName: ${{ github.event.inputs.pageName }}
+          page: ${{ github.event.inputs.page }}
           selection: ${{ github.event.inputs.selection }}
 
       - name: Log ℹ️
         run: |
           echo "fileKey: $fileKey"
-          echo "pageName: $pageName"
+          echo "page: $page"
           echo "selection: $selection"
         env:
           fileKey: ${{ steps.transform.outputs.fileKey }}
-          pageName: ${{ steps.transform.outputs.pageName }}
+          page: ${{ steps.transform.outputs.page }}
           selection: ${{ steps.transform.outputs.selection }}

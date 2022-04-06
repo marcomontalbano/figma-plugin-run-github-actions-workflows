@@ -28,10 +28,15 @@ export interface RequestInfoHandler extends EventHandler {
 
 export interface InfoResponseHandler extends EventHandler {
   name: 'INFO_RESPONSE'
-  handler: (pageName: string, selection: Selection[]) => void
+  handler: (page: Page, selection: Selection[]) => void
 }
 
 export type Selection = {
   id: SceneNode['id']
   name: SceneNode['name']
+}
+
+export type Page = {
+  id: PageNode['id']
+  name: PageNode['name']
 }

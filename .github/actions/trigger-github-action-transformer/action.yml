@@ -5,8 +5,8 @@ inputs:
   fileKey:
     description: Figma file key
     required: true
-  pageName:
-    description: Page name
+  page:
+    description: Stringified selected page (id, name)
     required: true
   selection:
     description: Stringified array of the selected nodes (id, name)
@@ -15,10 +15,10 @@ inputs:
 outputs:
   fileKey:
     description: Figma file key
-  pageName:
-    description: Page name
+  page:
+    description: Selected page name
   selection:
-    description: Selected nodes
+    description: Selected node ids
 
 runs:
   using: node16

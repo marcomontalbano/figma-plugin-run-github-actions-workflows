@@ -27,7 +27,7 @@ export default function () {
   on<RequestInfoHandler>('REQUEST_INFO', function () {
     emit<InfoResponseHandler>(
       'INFO_RESPONSE',
-      figma.currentPage.name,
+      { id: figma.currentPage.id, name: figma.currentPage.name },
       figma.currentPage.selection.map(({ id, name }) => ({ id, name }))
     )
   })

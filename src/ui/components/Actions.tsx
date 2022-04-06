@@ -39,7 +39,7 @@ export function Actions(): JSX.Element {
       console.log('action', { ...action, access_token: '***' })
       console.group('Inputs')
         console.log('fileKey', settings.fileKey)
-        console.log('pageName', settings.pageName)
+        console.log('page', settings.page)
         console.log('selection', settings.selection)
       console.groupEnd()
     console.groupEnd()
@@ -55,7 +55,7 @@ export function Actions(): JSX.Element {
         ref: action.ref,
         inputs: {
           fileKey: settings.fileKey,
-          pageName: settings.pageName,
+          page: JSON.stringify(settings.page),
           selection: JSON.stringify(settings.selection)
         }
       })
