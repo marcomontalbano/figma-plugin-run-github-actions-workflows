@@ -8,8 +8,9 @@ on:
         type: string
         required: true
       page:
-        description: Page name
+        description: Stringified selected page (id, name)
         type: string
+        default: '{}'
         required: true
       selection:
         description: Stringified array of the selected nodes (id, name)
