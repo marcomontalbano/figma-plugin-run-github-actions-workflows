@@ -28,7 +28,7 @@ jobs:
 
       - name: Transform 🧬
         id: transform
-        uses: ./.github/actions/trigger-github-actions-transformer
+        uses: ./.github/actions/run-github-actions-workflows-transformer
         with:
           fileKey: ${{ github.event.inputs.fileKey }}
           page: ${{ github.event.inputs.page }}

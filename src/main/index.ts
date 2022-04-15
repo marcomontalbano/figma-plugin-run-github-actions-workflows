@@ -17,8 +17,8 @@ export default function () {
     })
   })
 
-  on<SaveSettingsHandler>('SAVE_SETTINGS', function ({ fileKey, actions }) {
-    saveSettingsAsync<UserSettings>({ actions }).then(() => {
+  on<SaveSettingsHandler>('SAVE_SETTINGS', function ({ fileKey, workflows }) {
+    saveSettingsAsync<UserSettings>({ workflows }).then(() => {
       figma.root.setPluginData('fileKey', fileKey || '')
       console.log('Settings SAVED')
     })

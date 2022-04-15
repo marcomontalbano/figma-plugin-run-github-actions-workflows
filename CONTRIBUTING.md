@@ -1,4 +1,4 @@
-# Figma Plugin - Trigger GitHub Action
+# Figma Plugin - Run GitHub Actions workflows
 
 ## Development guide
 

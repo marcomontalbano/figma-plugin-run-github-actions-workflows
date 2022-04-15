@@ -12,51 +12,51 @@ import { emit } from '@create-figma-plugin/utilities'
 import { Fragment, FunctionComponent, h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 import { ButtonIcon } from './ButtonIcon'
-import { GitHubAction } from '../../Settings'
+import { GitHubActionsWorkflow } from '../../Settings'
 import { NotifyHandler } from '../../types'
 
 type Props = {
-  action?: GitHubAction
-  onSubmit: (action: GitHubAction) => Promise<boolean>
+  workflow?: GitHubActionsWorkflow
+  onSubmit: (workflow: GitHubActionsWorkflow) => Promise<boolean>
 }
 
-export const ManageAction: FunctionComponent<Props> = ({ action: originalAction, onSubmit }) => {
+export const ManageWorkflow: FunctionComponent<Props> = ({ workflow: originalWorkflow, onSubmit }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [action, setAction] = useState<Partial<GitHubAction> | undefined>(originalAction)
+  const [workflow, setWorkflow] = useState<Partial<GitHubActionsWorkflow> | undefined>(originalWorkflow)
 
   function handleClose() {
     setIsOpen(false)
     // @ts-ignore
-    setAction(null)
+    setWorkflow(null)
   }
 
   function handleSubmit() {
-    if (!action || !action.access_token || !action.name || !action.owner || !action.ref || !action.repo || !action.workflow_id) {
+    if (!workflow || !workflow.access_token || !workflow.name || !workflow.owner || !workflow.ref || !workflow.repo || !workflow.workflow_id) {
       emit<NotifyHandler>('NOTIFY', 'All fields are required!', { error: true })
       return
     }
 
-    onSubmit(action as GitHubAction).then(ok => {
+    onSubmit(workflow as GitHubActionsWorkflow).then(ok => {
       setIsOpen(!ok)
     })
   }
 
   return (
     <Fragment>
-      <ButtonIcon secondary={originalAction !== undefined} onClick={() => setIsOpen(true)}>{originalAction ? <IconPencil32 /> : <IconPlus32 />}</ButtonIcon>
+      <ButtonIcon secondary={originalWorkflow !== undefined} onClick={() => setIsOpen(true)}>{originalWorkflow ? <IconPencil32 /> : <IconPlus32 />}</ButtonIcon>
 
       <Modal
         isOpen={isOpen}
         onCloseButtonClick={handleClose}
-        title={originalAction ? `Edit action "${originalAction.name}"` : 'Add action'}
+        title={originalWorkflow ? `Edit workflow "${originalWorkflow.name}"` : 'Add workflow'}
       >
         <div style={{ width: 300, height: 400, padding: 15, overflow: 'auto' }}>
-          <Field label='Name' initialValue={isOpen && originalAction?.name} onChange={(name) => setAction((action) => ({ ...action, name }))} />
-          <Field label='Access Token (with the `repo` scope)' initialValue={isOpen && originalAction?.access_token} password onChange={(access_token) => setAction((action) => ({ ...action, access_token }))} />
-          <Field label='Owner' initialValue={isOpen && originalAction?.owner} placeholder='marcomontalbano' onChange={(owner) => setAction((action) => ({ ...action, owner }))} />
-          <Field label='Repo' initialValue={isOpen && originalAction?.repo} placeholder='figma-plugin-trigger-github-actions' onChange={(repo) => setAction((action) => ({ ...action, repo }))} />
-          <Field label='Ref' initialValue={isOpen && originalAction?.ref} placeholder='main' onChange={(ref) => setAction((action) => ({ ...action, ref }))} />
-          <Field label='Workflow ID' initialValue={isOpen && originalAction?.workflow_id} placeholder='from-figma.yaml' onChange={(workflow_id) => setAction((action) => ({ ...action, workflow_id }))} />
+          <Field label='Name' initialValue={isOpen && originalWorkflow?.name} onChange={(name) => setWorkflow((workflow) => ({ ...workflow, name }))} />
+          <Field label='Access Token (with the `repo` scope)' initialValue={isOpen && originalWorkflow?.access_token} password onChange={(access_token) => setWorkflow((workflow) => ({ ...workflow, access_token }))} />
+          <Field label='Owner' initialValue={isOpen && originalWorkflow?.owner} placeholder='marcomontalbano' onChange={(owner) => setWorkflow((workflow) => ({ ...workflow, owner }))} />
+          <Field label='Repo' initialValue={isOpen && originalWorkflow?.repo} placeholder='figma-plugin-run-github-actions-workflows' onChange={(repo) => setWorkflow((workflow) => ({ ...workflow, repo }))} />
+          <Field label='Ref' initialValue={isOpen && originalWorkflow?.ref} placeholder='main' onChange={(ref) => setWorkflow((workflow) => ({ ...workflow, ref }))} />
+          <Field label='Workflow ID' initialValue={isOpen && originalWorkflow?.workflow_id} placeholder='from-figma.yaml' onChange={(workflow_id) => setWorkflow((workflow) => ({ ...workflow, workflow_id }))} />
 
           <Text muted>Read more</Text>
           <VerticalSpace space="small" />
@@ -67,7 +67,7 @@ export const ManageAction: FunctionComponent<Props> = ({ action: originalAction,
 
           <Inline space='large'>
             <Button destructive secondary onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSubmit}>{originalAction ? 'Save' : 'Add'}</Button>
+            <Button onClick={handleSubmit}>{originalWorkflow ? 'Save' : 'Add'}</Button>
           </Inline>
         </div>
       </Modal>

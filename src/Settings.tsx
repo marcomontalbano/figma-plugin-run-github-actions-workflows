@@ -6,7 +6,7 @@ import { useContext, useEffect, useReducer } from 'preact/hooks'
 import { InfoResponseHandler, LoadSettingsHandler, Page, RequestInfoHandler, SaveSettingsHandler, Selection } from './types'
 
 
-export type GitHubAction = {
+export type GitHubActionsWorkflow = {
   name: string
 
   access_token: string
@@ -32,14 +32,14 @@ export type DocumentSettings = {
 }
 
 export type UserSettings = {
-  actions: GitHubAction[]
+  workflows: GitHubActionsWorkflow[]
 }
 
 type Action =
   | { type: 'LOAD'; payload: Settings }
-  | { type: 'ADD_ACTION'; payload: GitHubAction }
-  | { type: 'REMOVE_ACTION'; index: number }
-  | { type: 'EDIT_ACTION'; index: number; payload: GitHubAction }
+  | { type: 'ADD_WORKFLOW'; payload: GitHubActionsWorkflow }
+  | { type: 'REMOVE_WORKFLOW'; index: number }
+  | { type: 'EDIT_WORKFLOW'; index: number; payload: GitHubActionsWorkflow }
   | { type: 'EDIT_FILE_KEY'; fileKey: string }
   | { type: 'EDIT_SELECTION'; page: Page; selection: Selection[] }
 
@@ -48,21 +48,21 @@ export const initialState: Settings = {
   fileKey: undefined,
   page: undefined,
   selection: [],
-  actions: []
+  workflows: []
 }
 
 export const useSettingsReducer = () => useReducer<Settings, Action>(produce((draft, action) => {
   switch (action.type) {
     case 'LOAD':
       return action.payload
-    case 'ADD_ACTION':
-      draft.actions.push(action.payload)
+    case 'ADD_WORKFLOW':
+      draft.workflows.push(action.payload)
       break
-    case 'REMOVE_ACTION':
-      draft.actions.splice(action.index, 1)
+    case 'REMOVE_WORKFLOW':
+      draft.workflows.splice(action.index, 1)
       break
-    case 'EDIT_ACTION':
-      draft.actions[action.index] = action.payload
+    case 'EDIT_WORKFLOW':
+      draft.workflows[action.index] = action.payload
       break
     case 'EDIT_FILE_KEY':
       draft.fileKey = action.fileKey
@@ -90,7 +90,7 @@ const SettingsProvider: FunctionalComponent = ({ children }) => {
     if (settings.loaded) {
       emit<SaveSettingsHandler>('SAVE_SETTINGS', settings)
     }
-  }, [settings.actions, settings.fileKey])
+  }, [settings.workflows, settings.fileKey])
 
   useEffect(function getInfo() {
     on<InfoResponseHandler>('INFO_RESPONSE', (page, selection) => {

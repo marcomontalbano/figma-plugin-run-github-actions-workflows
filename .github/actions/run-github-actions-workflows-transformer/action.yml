@@ -1,5 +1,5 @@
-name: Trigger GitHub Action - Transformer
-description: Transform the "Trigger GitHub Action" payload
+name: Run GitHub Actions workflows - Transformer
+description: Transform the "Run GitHub Actions workflows" payload
 
 inputs:
   fileKey:

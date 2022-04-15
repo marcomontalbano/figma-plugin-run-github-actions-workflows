@@ -1,5 +1,5 @@
 {
-  "name": "figma-plugin-trigger-github-actions",
+  "name": "figma-plugin-run-github-actions-workflows",
   "private": true,
   "dependencies": {
     "@create-figma-plugin/ui": "^1.8.4",
@@ -22,7 +22,7 @@
       "figma"
     ],
     "id": "1096890502176164513",
-    "name": "Trigger GitHub Actions",
+    "name": "Run GitHub Actions workflows",
     "main": "src/main/index.ts",
     "ui": "src/ui/index.tsx"
   }
