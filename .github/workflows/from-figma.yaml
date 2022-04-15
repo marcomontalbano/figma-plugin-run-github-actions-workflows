@@ -1,4 +1,4 @@
-name: Dispatch
+name: From Figma
 
 on: 
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
 
       - name: Transform 🧬
         id: transform
-        uses: ./.github/actions/trigger-github-action-transformer
+        uses: ./.github/actions/trigger-github-actions-transformer
         with:
           fileKey: ${{ github.event.inputs.fileKey }}
           page: ${{ github.event.inputs.page }}

@@ -54,9 +54,9 @@ export const ManageAction: FunctionComponent<Props> = ({ action: originalAction,
           <Field label='Name' initialValue={isOpen && originalAction?.name} onChange={(name) => setAction((action) => ({ ...action, name }))} />
           <Field label='Access Token (with the `repo` scope)' initialValue={isOpen && originalAction?.access_token} password onChange={(access_token) => setAction((action) => ({ ...action, access_token }))} />
           <Field label='Owner' initialValue={isOpen && originalAction?.owner} placeholder='marcomontalbano' onChange={(owner) => setAction((action) => ({ ...action, owner }))} />
-          <Field label='Repo' initialValue={isOpen && originalAction?.repo} placeholder='figma-plugin-trigger-github-action' onChange={(repo) => setAction((action) => ({ ...action, repo }))} />
+          <Field label='Repo' initialValue={isOpen && originalAction?.repo} placeholder='figma-plugin-trigger-github-actions' onChange={(repo) => setAction((action) => ({ ...action, repo }))} />
           <Field label='Ref' initialValue={isOpen && originalAction?.ref} placeholder='main' onChange={(ref) => setAction((action) => ({ ...action, ref }))} />
-          <Field label='Workflow ID' initialValue={isOpen && originalAction?.workflow_id} placeholder='dispatch.yaml' onChange={(workflow_id) => setAction((action) => ({ ...action, workflow_id }))} />
+          <Field label='Workflow ID' initialValue={isOpen && originalAction?.workflow_id} placeholder='from-figma.yaml' onChange={(workflow_id) => setAction((action) => ({ ...action, workflow_id }))} />
 
           <Text muted>Read more</Text>
           <VerticalSpace space="small" />

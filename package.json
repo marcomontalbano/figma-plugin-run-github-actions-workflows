@@ -1,5 +1,5 @@
 {
-  "name": "figma-plugin-trigger-github-action",
+  "name": "figma-plugin-trigger-github-actions",
   "private": true,
   "dependencies": {
     "@create-figma-plugin/ui": "^1.8.4",
@@ -21,8 +21,8 @@
     "editorType": [
       "figma"
     ],
-    "id": "trigger-github-action",
-    "name": "Trigger GitHub Action",
+    "id": "1096890502176164513",
+    "name": "Trigger GitHub Actions",
     "main": "src/main/index.ts",
     "ui": "src/ui/index.tsx"
   }
