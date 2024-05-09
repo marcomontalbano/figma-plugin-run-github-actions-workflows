@@ -1,5 +1,5 @@
-import { Button, ButtonProps } from '@create-figma-plugin/ui'
-import { FunctionComponent, h } from 'preact'
+import { Button, type ButtonProps } from '@create-figma-plugin/ui'
+import { type FunctionComponent, h } from 'preact'
 
 import styles from './ButtonIcon.module.css'
 

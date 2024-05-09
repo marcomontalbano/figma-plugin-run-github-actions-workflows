@@ -37,9 +37,7 @@ jobs:
       - name: Log ℹ️
         run: |
           echo "fileKey: $fileKey"
-          echo "page: $page"
-          echo "selection: $selection"
+          echo "ids: $ids"
         env:
           fileKey: ${{ steps.transform.outputs.fileKey }}
-          page: ${{ steps.transform.outputs.page }}
-          selection: ${{ steps.transform.outputs.selection }}
+          ids: ${{ steps.transform.outputs.ids }}

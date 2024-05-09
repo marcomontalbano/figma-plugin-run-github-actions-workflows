@@ -1,7 +1,8 @@
-import { Props, Text, Textbox, TextboxProps, VerticalSpace } from '@create-figma-plugin/ui'
-import { h, Fragment, JSX } from 'preact'
+import { VerticalSpace } from '@create-figma-plugin/ui'
+import { Fragment, h, type JSX } from 'preact'
 
 import { useSettings } from '../../Settings'
+import { FormInput } from './FormInput'
 import { Title } from './Title'
 
 export function Inputs(): JSX.Element {
@@ -13,42 +14,20 @@ export function Inputs(): JSX.Element {
 
       <VerticalSpace space='large' />
 
-      <Input
+      <FormInput
         label='fileKey'
-        required
         onValueInput={fileKey => dispatch({ type: 'EDIT_FILE_KEY', fileKey })}
         value={settings.fileKey || ''} />
 
-      <Input
+      <FormInput
         label='page'
-        required
         value={JSON.stringify(settings.page) || ''}
         disabled />
 
-      <Input
+      <FormInput
         label='selection'
-        required
         value={JSON.stringify(settings.selection)}
         disabled />
-    </Fragment>
-  )
-}
-
-function Input<Name extends string>({ label, ...textboxProps }: Props<HTMLInputElement, TextboxProps<Name>>): JSX.Element {
-  return (
-    <Fragment>
-      <div>
-        {
-          label && (
-            <Fragment>
-              <Text muted>{label}</Text>
-              <VerticalSpace space='small' />
-            </Fragment>
-          )
-        }
-        <Textbox {...textboxProps} />
-        <VerticalSpace space='medium' />
-      </div>
     </Fragment>
   )
 }

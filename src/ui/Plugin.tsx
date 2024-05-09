@@ -4,11 +4,9 @@ import { h } from 'preact'
 import { useEffect } from 'preact/hooks'
 
 import { useSettings } from '../Settings'
-import { InitHandler } from '../types'
+import type { InitHandler } from '../types'
 import { GitHubActionsWorkflows } from './components/GitHubActionsWorkflows'
 import { Inputs } from './components/Inputs'
-
-
 
 export function Plugin() {
   const [ settings ] = useSettings()
@@ -26,7 +24,7 @@ export function Plugin() {
   }
 
   return (
-    <Container>
+    <Container space='small'>
       <Inputs />
       <GitHubActionsWorkflows />
     </Container>

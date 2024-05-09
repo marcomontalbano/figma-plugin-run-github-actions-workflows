@@ -1,7 +1,14 @@
-import { on, emit, showUI, loadSettingsAsync, saveSettingsAsync } from '@create-figma-plugin/utilities'
-import { initialState, UserSettings, Settings } from '../Settings'
+import { emit, loadSettingsAsync, on, saveSettingsAsync, showUI } from '@create-figma-plugin/utilities'
+import { initialState, type Settings, type UserSettings } from '../Settings'
 
-import { RequestInfoHandler, InfoResponseHandler, LoadSettingsHandler, SaveSettingsHandler, InitHandler, NotifyHandler } from '../types'
+import type {
+  InfoResponseHandler,
+  InitHandler,
+  LoadSettingsHandler,
+  NotifyHandler,
+  RequestInfoHandler,
+  SaveSettingsHandler
+} from '../types'
 
 export default function () {
 

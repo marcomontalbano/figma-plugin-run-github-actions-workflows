@@ -3,17 +3,18 @@ import {
   IconPencil32,
   IconPlus32,
   Inline,
+  Link,
   Modal,
   Text,
-  Textbox,
   VerticalSpace
 } from '@create-figma-plugin/ui'
 import { emit } from '@create-figma-plugin/utilities'
-import { Fragment, FunctionComponent, h } from 'preact'
+import { Fragment, h, type FunctionComponent } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
+import type { GitHubActionsWorkflow } from '../../Settings'
+import type { NotifyHandler } from '../../types'
 import { ButtonIcon } from './ButtonIcon'
-import { GitHubActionsWorkflow } from '../../Settings'
-import { NotifyHandler } from '../../types'
+import { FormInput } from './FormInput'
 
 type Props = {
   workflow?: GitHubActionsWorkflow
@@ -46,7 +47,7 @@ export const ManageWorkflow: FunctionComponent<Props> = ({ workflow: originalWor
       <ButtonIcon secondary={originalWorkflow !== undefined} onClick={() => setIsOpen(true)}>{originalWorkflow ? <IconPencil32 /> : <IconPlus32 />}</ButtonIcon>
 
       <Modal
-        isOpen={isOpen}
+        open={isOpen}
         onCloseButtonClick={handleClose}
         title={originalWorkflow ? `Edit workflow "${originalWorkflow.name}"` : 'Add workflow'}
       >
@@ -59,14 +60,12 @@ export const ManageWorkflow: FunctionComponent<Props> = ({ workflow: originalWor
           <Field label='Workflow ID' initialValue={isOpen && originalWorkflow?.workflow_id} placeholder='from-figma.yaml' onChange={(workflow_id) => setWorkflow((workflow) => ({ ...workflow, workflow_id }))} />
 
           <Text muted>Read more</Text>
-          <VerticalSpace space="small" />
-          <Text>
-            <a target='_blank' href="https://docs.github.com/en/rest/reference/actions#create-a-workflow-dispatch-event">GitHub • Create a workflow dispatch event</a>
-          </Text>
+          <VerticalSpace space='small' />
+          <Link target='_blank' href="https://docs.github.com/en/rest/reference/actions#create-a-workflow-dispatch-event">GitHub • Create a workflow dispatch event</Link>
           <VerticalSpace space="large" />
 
           <Inline space='large'>
-            <Button destructive secondary onClick={handleClose}>Cancel</Button>
+            <Button secondary onClick={handleClose}>Cancel</Button>
             <Button onClick={handleSubmit}>{originalWorkflow ? 'Save' : 'Add'}</Button>
           </Inline>
         </div>
@@ -96,16 +95,12 @@ const Field: FunctionComponent<FieldProps> = ({ label, initialValue, password = 
   }, [value])
 
   return (
-    <div>
-      <Text muted>{label}</Text>
-      <VerticalSpace space="small" />
-      <Textbox
-        onValueInput={setValue}
-        value={value}
-        password={password}
-        placeholder={placeholder}
-      />
-      <VerticalSpace space="large" />
-    </div>
+    <FormInput
+      label={label}
+      onValueInput={setValue}
+      value={value}
+      password={password}
+      placeholder={placeholder}
+    />
   )
 }

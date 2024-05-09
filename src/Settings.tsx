@@ -1,9 +1,9 @@
 import { emit, on } from '@create-figma-plugin/utilities'
-import produce from 'immer'
-import { createContext, FunctionalComponent, h } from 'preact'
+import { produce } from 'immer'
+import { createContext, h, type FunctionalComponent } from 'preact'
 import { useContext, useEffect, useReducer } from 'preact/hooks'
 
-import { InfoResponseHandler, LoadSettingsHandler, Page, RequestInfoHandler, SaveSettingsHandler, Selection } from './types'
+import type { InfoResponseHandler, LoadSettingsHandler, Page, RequestInfoHandler, SaveSettingsHandler, Selection } from './types'
 
 
 export type GitHubActionsWorkflow = {

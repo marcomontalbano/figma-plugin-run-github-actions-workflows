@@ -1,12 +1,12 @@
-import { IconCross32, IconPlay32, Inline, Text, VerticalSpace } from '@create-figma-plugin/ui'
+import { IconCross32, IconPlay32, Inline, Link, VerticalSpace } from '@create-figma-plugin/ui'
 import { emit } from '@create-figma-plugin/utilities'
-import { Fragment, h, JSX } from 'preact'
+import { Fragment, h, type JSX } from 'preact'
 import { useCallback } from 'preact/hooks'
 
-import { GitHubActionsWorkflow, useSettings } from '../../Settings'
-import { NotifyHandler } from '../../types'
-import { ManageWorkflow } from './ManageWorkflow'
+import { useSettings, type GitHubActionsWorkflow } from '../../Settings'
+import type { NotifyHandler } from '../../types'
 import { ButtonIcon } from './ButtonIcon'
+import { ManageWorkflow } from './ManageWorkflow'
 import { Title } from './Title'
 
 export function GitHubActionsWorkflows(): JSX.Element {
@@ -99,17 +99,22 @@ export function GitHubActionsWorkflows(): JSX.Element {
 
   return (
     <Fragment>
-      <Title>Workflows</Title>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Title>Workflows</Title>
+        {/* <IconButton onClick={() => {}}>
+          <IconPlus32 />
+        </IconButton> */}
+      </div>
 
       {
         settings?.workflows.map((workflow, index) => (
           <Fragment>
             <VerticalSpace space='small' />
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Text style={{ flex: '1 1 auto' }}><a target='_blank' href={`https://github.com/${workflow.owner}/${workflow.repo}/actions/workflows/${workflow.workflow_id}`}>{workflow.name}</a></Text>
+              <Link style={{ flex: '1 1 auto' }} target='_blank' href={`https://github.com/${workflow.owner}/${workflow.repo}/actions/workflows/${workflow.workflow_id}`}>{workflow.name}</Link>
               <ButtonIcon onClick={() => handleRunWorkflow(workflow)}><IconPlay32 /></ButtonIcon>
               <ManageWorkflow workflow={workflow} onSubmit={(workflow) => handleEditWorkflow(index, workflow)} />
-              <ButtonIcon destructive secondary onClick={() => handleRemoveWorkflow(index, workflow)}><IconCross32 /></ButtonIcon>
+              <ButtonIcon danger secondary onClick={() => handleRemoveWorkflow(index, workflow)}><IconCross32 /></ButtonIcon>
             </div>
           </Fragment>
         ))

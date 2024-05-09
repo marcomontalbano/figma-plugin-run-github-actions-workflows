@@ -1,5 +1,5 @@
-import { EventHandler } from '@create-figma-plugin/utilities'
-import { Settings } from './Settings'
+import type { EventHandler } from '@create-figma-plugin/utilities'
+import type { Settings } from './Settings'
 
 export interface InitHandler extends EventHandler {
   name: 'INIT'
