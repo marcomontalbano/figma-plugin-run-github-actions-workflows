@@ -1,6 +1,5 @@
 import { VerticalSpace } from '@create-figma-plugin/ui'
 import { Fragment, h, type JSX } from 'preact'
-
 import { useSettings } from '../../Settings'
 import { FormInput } from './FormInput'
 import { Title } from './Title'

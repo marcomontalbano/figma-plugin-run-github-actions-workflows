@@ -21,11 +21,6 @@ export interface SaveSettingsHandler extends EventHandler {
   handler: (settings: Settings) => void
 }
 
-export interface RequestInfoHandler extends EventHandler {
-  name: 'REQUEST_INFO'
-  handler: () => void
-}
-
 export interface InfoResponseHandler extends EventHandler {
   name: 'INFO_RESPONSE'
   handler: (page: Page, selection: Selection[]) => void
