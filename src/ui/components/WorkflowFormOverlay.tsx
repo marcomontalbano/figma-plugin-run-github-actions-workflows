@@ -1,27 +1,24 @@
 import {
   Button,
-  IconPencil32,
-  IconPlus32,
-  Inline,
   Link,
   Modal,
   Text,
   VerticalSpace
 } from '@create-figma-plugin/ui'
 import { emit } from '@create-figma-plugin/utilities'
-import { Fragment, h, type FunctionComponent } from 'preact'
+import { Fragment, h, type FunctionComponent, type JSX } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
-import type { GitHubActionsWorkflow } from '../../Settings'
+import { type GitHubActionsWorkflow } from '../../Settings'
 import type { NotifyHandler } from '../../types'
-import { ButtonIcon } from './ButtonIcon'
 import { FormInput } from './FormInput'
 
 type Props = {
+  button: JSX.Element
   workflow?: GitHubActionsWorkflow
   onSubmit: (workflow: GitHubActionsWorkflow) => Promise<boolean>
 }
 
-export const ManageWorkflow: FunctionComponent<Props> = ({ workflow: originalWorkflow, onSubmit }) => {
+export const WorkflowFormOverlay: FunctionComponent<Props> = ({ workflow: originalWorkflow, onSubmit, button }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [workflow, setWorkflow] = useState<Partial<GitHubActionsWorkflow> | undefined>(originalWorkflow)
 
@@ -44,7 +41,9 @@ export const ManageWorkflow: FunctionComponent<Props> = ({ workflow: originalWor
 
   return (
     <Fragment>
-      <ButtonIcon secondary={originalWorkflow !== undefined} onClick={() => setIsOpen(true)}>{originalWorkflow ? <IconPencil32 /> : <IconPlus32 />}</ButtonIcon>
+      <div onClick={() => setIsOpen(true)}>
+      { button }
+      </div>
 
       <Modal
         open={isOpen}
@@ -64,10 +63,10 @@ export const ManageWorkflow: FunctionComponent<Props> = ({ workflow: originalWor
           <Link target='_blank' href="https://docs.github.com/en/rest/reference/actions#create-a-workflow-dispatch-event">GitHub • Create a workflow dispatch event</Link>
           <VerticalSpace space="large" />
 
-          <Inline space='large'>
-            <Button secondary onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSubmit}>{originalWorkflow ? 'Save' : 'Add'}</Button>
-          </Inline>
+          <div style={{ display: 'flex', gap: '24px' }}>
+            <div style={{ flexBasis: '50%' }}><Button fullWidth secondary onClick={handleClose}>Cancel</Button></div>
+            <div style={{ flexBasis: '50%' }}><Button fullWidth onClick={handleSubmit}>{originalWorkflow ? 'Save' : 'Add'}</Button></div>
+          </div>
         </div>
       </Modal>
     </Fragment>
