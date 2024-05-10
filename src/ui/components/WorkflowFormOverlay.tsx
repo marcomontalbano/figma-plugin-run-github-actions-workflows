@@ -60,7 +60,7 @@ export const WorkflowFormOverlay: FunctionComponent<Props> = ({ workflow: origin
 
           <Text muted>Read more</Text>
           <VerticalSpace space='small' />
-          <Link target='_blank' href="https://docs.github.com/en/rest/reference/actions#create-a-workflow-dispatch-event">GitHub • Create a workflow dispatch event</Link>
+          <Link style={{ pointerEvents: 'unset' }} target='_blank' href="https://docs.github.com/en/rest/reference/actions#create-a-workflow-dispatch-event">GitHub • Create a workflow dispatch event</Link>
           <VerticalSpace space="large" />
 
           <div style={{ display: 'flex', gap: '24px' }}>

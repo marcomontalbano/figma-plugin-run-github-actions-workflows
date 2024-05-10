@@ -119,7 +119,7 @@ export function Workflows(): JSX.Element {
                 <IconPlay32 color='success-pressed' />
               </IconButton>
               <div style={{ flex: '1 1 auto' }}>
-                <Link target='_blank' href={`https://github.com/${workflow.owner}/${workflow.repo}/actions/workflows/${workflow.workflow_id}`}>{workflow.name}</Link>
+                <Link style={{ pointerEvents: 'unset' }} target='_blank' href={`https://github.com/${workflow.owner}/${workflow.repo}/actions/workflows/${workflow.workflow_id}`}>{workflow.name}</Link>
               </div>
               <WorkflowFormOverlay
                 workflow={workflow}
