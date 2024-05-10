@@ -15,11 +15,9 @@ inputs:
 outputs:
   fileKey:
     description: Figma file key
-  page:
-    description: Selected page name
-  selection:
-    description: Selected node ids
+  ids:
+    description: Stringified array of ids to export
 
 runs:
-  using: node16
+  using: node20
   main: main.js

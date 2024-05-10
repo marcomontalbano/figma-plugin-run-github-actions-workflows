@@ -1,5 +1,5 @@
-import { EventHandler } from '@create-figma-plugin/utilities'
-import { Settings } from './Settings'
+import type { EventHandler } from '@create-figma-plugin/utilities'
+import type { Settings } from './Settings'
 
 export interface InitHandler extends EventHandler {
   name: 'INIT'
@@ -19,11 +19,6 @@ export interface LoadSettingsHandler extends EventHandler {
 export interface SaveSettingsHandler extends EventHandler {
   name: 'SAVE_SETTINGS'
   handler: (settings: Settings) => void
-}
-
-export interface RequestInfoHandler extends EventHandler {
-  name: 'REQUEST_INFO'
-  handler: () => void
 }
 
 export interface InfoResponseHandler extends EventHandler {

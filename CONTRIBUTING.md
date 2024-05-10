@@ -13,7 +13,7 @@
 
 To build the plugin:
 
-```
+```sh
 $ npm run build
 ```
 
@@ -21,7 +21,7 @@ This will generate a [`manifest.json`](https://figma.com/plugin-docs/manifest/) 
 
 To watch for code changes and rebuild the plugin automatically:
 
-```
+```sh
 $ npm run watch
 ```
 

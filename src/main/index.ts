@@ -1,7 +1,12 @@
-import { on, emit, showUI, loadSettingsAsync, saveSettingsAsync } from '@create-figma-plugin/utilities'
-import { initialState, UserSettings, Settings } from '../Settings'
-
-import { RequestInfoHandler, InfoResponseHandler, LoadSettingsHandler, SaveSettingsHandler, InitHandler, NotifyHandler } from '../types'
+import { emit, loadSettingsAsync, on, saveSettingsAsync, showUI } from '@create-figma-plugin/utilities'
+import { initialState, type Settings, type UserSettings } from '../Settings'
+import type {
+  InfoResponseHandler,
+  InitHandler,
+  LoadSettingsHandler,
+  NotifyHandler,
+  SaveSettingsHandler
+} from '../types'
 
 export default function () {
 
@@ -12,6 +17,12 @@ export default function () {
         loaded: true,
         fileKey: figma.root.getPluginData('fileKey')
       })
+
+      emit<InfoResponseHandler>(
+        'INFO_RESPONSE',
+        { id: figma.currentPage.id, name: figma.currentPage.name },
+        figma.currentPage.selection.map(({ id, name }) => ({ id, name }))
+      )
 
       console.log('Settings LOADED')
     })
@@ -24,7 +35,7 @@ export default function () {
     })
   })
 
-  on<RequestInfoHandler>('REQUEST_INFO', function () {
+  figma.on('selectionchange', function () {
     emit<InfoResponseHandler>(
       'INFO_RESPONSE',
       { id: figma.currentPage.id, name: figma.currentPage.name },

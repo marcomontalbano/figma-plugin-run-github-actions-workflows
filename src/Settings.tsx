@@ -1,9 +1,14 @@
 import { emit, on } from '@create-figma-plugin/utilities'
-import produce from 'immer'
-import { createContext, FunctionalComponent, h } from 'preact'
+import { produce } from 'immer'
+import { createContext, h, type FunctionalComponent } from 'preact'
 import { useContext, useEffect, useReducer } from 'preact/hooks'
-
-import { InfoResponseHandler, LoadSettingsHandler, Page, RequestInfoHandler, SaveSettingsHandler, Selection } from './types'
+import type {
+  InfoResponseHandler,
+  LoadSettingsHandler,
+  Page,
+  SaveSettingsHandler,
+  Selection
+} from './types'
 
 
 export type GitHubActionsWorkflow = {
@@ -96,12 +101,6 @@ const SettingsProvider: FunctionalComponent = ({ children }) => {
     on<InfoResponseHandler>('INFO_RESPONSE', (page, selection) => {
       dispatch({ type: 'EDIT_SELECTION', page, selection: selection })
     })
-
-    const interval = setInterval(() => {
-      emit<RequestInfoHandler>('REQUEST_INFO')
-    }, 100)
-
-    return () => clearInterval(interval)
   }, [])
 
   return (

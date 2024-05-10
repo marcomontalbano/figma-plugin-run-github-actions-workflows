@@ -1,15 +1,13 @@
-import { IconCross32, IconPlay32, Inline, Text, VerticalSpace } from '@create-figma-plugin/ui'
+import { IconButton, IconPencil32, IconPlay32, IconPlus32, IconTrash32, Link, VerticalSpace } from '@create-figma-plugin/ui'
 import { emit } from '@create-figma-plugin/utilities'
-import { Fragment, h, JSX } from 'preact'
+import { Fragment, h, type JSX } from 'preact'
 import { useCallback } from 'preact/hooks'
-
-import { GitHubActionsWorkflow, useSettings } from '../../Settings'
-import { NotifyHandler } from '../../types'
-import { ManageWorkflow } from './ManageWorkflow'
-import { ButtonIcon } from './ButtonIcon'
+import { useSettings, type GitHubActionsWorkflow } from '../../Settings'
+import type { NotifyHandler } from '../../types'
 import { Title } from './Title'
+import { WorkflowFormOverlay } from './WorkflowFormOverlay'
 
-export function GitHubActionsWorkflows(): JSX.Element {
+export function Workflows(): JSX.Element {
   const [settings, dispatch] = useSettings()
 
   const isValidWorkflow = useCallback((workflow: GitHubActionsWorkflow) => {
@@ -99,26 +97,44 @@ export function GitHubActionsWorkflows(): JSX.Element {
 
   return (
     <Fragment>
-      <Title>Workflows</Title>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Title>Workflows</Title>
+
+        <WorkflowFormOverlay
+          onSubmit={(workflow) => handleAddWorkflow(workflow)}
+          button={
+            <IconButton>
+              <IconPlus32 />
+            </IconButton>
+          }
+        />
+      </div>
 
       {
         settings?.workflows.map((workflow, index) => (
           <Fragment>
             <VerticalSpace space='small' />
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Text style={{ flex: '1 1 auto' }}><a target='_blank' href={`https://github.com/${workflow.owner}/${workflow.repo}/actions/workflows/${workflow.workflow_id}`}>{workflow.name}</a></Text>
-              <ButtonIcon onClick={() => handleRunWorkflow(workflow)}><IconPlay32 /></ButtonIcon>
-              <ManageWorkflow workflow={workflow} onSubmit={(workflow) => handleEditWorkflow(index, workflow)} />
-              <ButtonIcon destructive secondary onClick={() => handleRemoveWorkflow(index, workflow)}><IconCross32 /></ButtonIcon>
+              <IconButton onClick={() => handleRunWorkflow(workflow)}>
+                <IconPlay32 color='success-pressed' />
+              </IconButton>
+              <div style={{ flex: '1 1 auto' }}>
+                <Link style={{ pointerEvents: 'unset' }} target='_blank' href={`https://github.com/${workflow.owner}/${workflow.repo}/actions/workflows/${workflow.workflow_id}`}>{workflow.name}</Link>
+              </div>
+              <WorkflowFormOverlay
+                workflow={workflow}
+                onSubmit={(workflow) => handleEditWorkflow(index, workflow)}
+                button={
+                  <IconButton><IconPencil32 color='brand' /></IconButton>
+                }
+              />
+              <IconButton onClick={() => handleRemoveWorkflow(index, workflow)}>
+                <IconTrash32 color='danger' />
+              </IconButton>
             </div>
           </Fragment>
         ))
       }
-
-      <VerticalSpace space='large' />
-      <Inline space='extraSmall' style={{ textAlign: 'right' }}>
-        <ManageWorkflow onSubmit={(workflow) => handleAddWorkflow(workflow)} />
-      </Inline>
     </Fragment>
   )
 }
