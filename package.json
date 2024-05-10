@@ -30,6 +30,11 @@
     "id": "1096890502176164513",
     "name": "Run GitHub Actions workflows",
     "main": "src/main/index.ts",
-    "ui": "src/ui/index.tsx"
+    "ui": "src/ui/index.tsx",
+    "networkAccess": {
+      "allowedDomains": [
+        "https://api.github.com"
+      ]
+    }
   }
 }
